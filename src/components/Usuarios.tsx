@@ -1,12 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { reqRespApi } from "../api/reqRes";
 import { ReqRespUsuarioListado, Usuario } from "../interfaces/reqResp";
 
 export const Usuarios = () => {
 
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+    const ficRefPage = useRef(0);
 
     useEffect(() => {
+        //Llamar función de carga de usuarios.
+        ficFnCargaUsuarios();
+        }, []);
+        /*
         //Llamar API
         reqRespApi.get<ReqRespUsuarioListado>('/users')
         //reqRespApi.get('/users')
@@ -20,6 +25,33 @@ export const Usuarios = () => {
         })
         .catch(err => console.log(err))
         }, [])
+        */
+        
+        const ficFnCargaUsuarios = async () => {
+        
+            const ficResponse = await
+            //Llamar API
+            reqRespApi.get<ReqRespUsuarioListado>('/users', {
+                params: {
+                    page: ficRefPage.current
+                }
+            })
+            .then(resp=> {
+                //console.log(resp);   
+                //console.log(resp.data);
+                //console.log(resp.data.data);
+                //console.log(resp.data.data[0].first_name);
+                //console.log(resp.data.data);
+                if (resp.data.data.length > 0) {
+                    setUsuarios(resp.data.data);
+                    ficRefPage.current ++;
+                }
+                else {
+                    alert('No hay más registros');
+                }
+            })
+            .catch(err => console.log(err))
+        }
 
         const renderItem = (usuario: Usuario) => {
             return (
@@ -68,6 +100,12 @@ export const Usuarios = () => {
                     }
                 </tbody>
             </table>
+            <button 
+                className ="btn btn-primary"
+                onClick={ficFnCargaUsuarios}
+            >
+                Siguiente 
+            </button>
         </>
     )
 }
