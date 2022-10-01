@@ -1,12 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { reqRespApi } from "../api/reqRes";
+import { reqRespApi } from "../api/reqResp";
 import { ReqRespUsuarioListado, Usuario } from "../interfaces/reqResp";
+//import { Usuario } from '../interfaces/reqResp';
+//import { useUsuarios } from './hooks/useUsuarios';
 
 export const Usuarios = () => {
+    //const { usuarios, ficFnPaginaSiguiente, ficFnPaginaAnterior} = useUsuarios();
 
+    
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
     const ficRefPage = useRef(0);
-
+    
     useEffect(() => {
         //Llamar función de carga de usuarios.
         ficFnCargaUsuarios();
@@ -49,10 +53,11 @@ export const Usuarios = () => {
                 else {
                     alert('No hay más registros');
                 }
+                
             })
             .catch(err => console.log(err))
         }
-
+        
         const renderItem = (usuario: Usuario) => {
             return (
                 <tr key={usuario.id.toString()}>
@@ -100,9 +105,19 @@ export const Usuarios = () => {
                     }
                 </tbody>
             </table>
+            
+            <button 
+                className ="btn btn-primary"
+                //onClick={ficFnCargaUsuarios}
+                //onClick= { ficFnPaginaAnterior }
+            >
+                Anterior
+            </button>
+            &nbsp; 
             <button 
                 className ="btn btn-primary"
                 onClick={ficFnCargaUsuarios}
+                //onClick= { ficFnPaginaSiguiente }
             >
                 Siguiente 
             </button>
